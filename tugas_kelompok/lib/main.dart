@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_kelompok/colors_config.dart';
 import 'package:tugas_kelompok/login_page.dart';
+import 'package:tugas_kelompok/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Palette.backgroundColor,
       ),
-      home: LoginPage(),
+      home: MainPage(),
     );
   }
 }

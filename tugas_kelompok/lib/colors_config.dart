@@ -5,4 +5,5 @@ class Palette {
   static const Color iconColor = Color(0xFFB6C7D1);
   static const Color textColor1 = Color(0XFFA7BCC7);
   static const Color textColor2 = Color(0XFF9BB3C0);
+  static const Color primaryColor = Color(0Xff8c7ae6);
 }
