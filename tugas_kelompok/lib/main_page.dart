@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_kelompok/colors_config.dart';
+import 'package:tugas_kelompok/widget/card_news.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
+
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Gits Article"),
         backgroundColor: Palette.backgroundColor,
@@ -19,11 +23,13 @@ class _MainPageState extends State<MainPage> {
             Icons.menu,
             color: Colors.white,
           ),
-          onPressed: () => Scaffold.of(context).openDrawer(),
+          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
         ),
       ),
-      body: Container(),
-      drawer: Drawer(
+      body: Container(
+        child: CardNews(),
+      ),
+      drawer: new Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
         // space to fit everything.
@@ -35,7 +41,7 @@ class _MainPageState extends State<MainPage> {
               decoration: BoxDecoration(
                 color: Palette.backgroundColor,
               ),
-              child: Text('Drawer Header',
+              child: Text('GITS Article',
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
