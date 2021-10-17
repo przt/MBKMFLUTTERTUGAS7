@@ -21,17 +21,18 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _sc.addListener(() {
-      if (_sc.position.pixels ==
-          _sc.position.maxScrollExtent) {
+      if (_sc.position.pixels == _sc.position.maxScrollExtent) {
         _getMoreData(page);
       }
     });
   }
+
   @override
   void dispose() {
     _sc.dispose();
     super.dispose();
   }
+
   Widget _buildProgressIndicator() {
     return new Padding(
       padding: const EdgeInsets.all(8.0),
@@ -43,6 +44,7 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
+
   void _getMoreData(int index) async {
     if (!isLoading) {
       setState(() {
@@ -63,6 +65,7 @@ class _MainPageState extends State<MainPage> {
       });
     }
   }
+
   Widget _buildList() {
     return ListView.builder(
       itemCount: users.length + 1, // Add one more item for progress indicator
@@ -79,6 +82,7 @@ class _MainPageState extends State<MainPage> {
       controller: _sc,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,9 +144,12 @@ class _MainPageState extends State<MainPage> {
               ),
               onTap: () {
                 // Update the state of the app
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
                 // ...
                 // Then close the drawer
-                Navigator.pop(context);
               },
             ),
           ],
