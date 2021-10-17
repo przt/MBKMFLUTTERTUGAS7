@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_kelompok/colors_config.dart';
 import 'package:dio/dio.dart';
+import 'package:tugas_kelompok/login_page.dart';
 import 'package:tugas_kelompok/widget/card_news.dart';
 
 class MainPage extends StatefulWidget {
@@ -146,7 +147,7 @@ class _MainPageState extends State<MainPage> {
                 // Update the state of the app
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Login()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                 );
                 // ...
                 // Then close the drawer
