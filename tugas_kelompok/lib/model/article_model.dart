@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class Welcome {
-  Welcome({
+class Article {
+  Article({
     required this.id,
     required this.date,
     required this.link,
@@ -17,11 +17,11 @@ class Welcome {
   Content content;
   int author;
 
-  factory Welcome.fromJson(String str) => Welcome.fromMap(json.decode(str));
+  factory Article.fromJson(String str) => Article.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Welcome.fromMap(Map<String, dynamic> json) => Welcome(
+  factory Article.fromMap(Map<String, dynamic> json) => Article(
         id: json["id"],
         date: DateTime.parse(json["date"]),
         link: json["link"],
