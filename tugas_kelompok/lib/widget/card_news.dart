@@ -11,7 +11,7 @@ class CardNews extends StatefulWidget {
 class _CardNewsState extends State<CardNews> {
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Card(  
       child: Container(
         height: 210,
         width: 310,
