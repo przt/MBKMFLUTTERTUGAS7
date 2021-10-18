@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_kelompok/colors_config.dart';
+import 'package:tugas_kelompok/provider/all_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,6 +11,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController username = TextEditingController();
+  final TextEditingController password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,11 +103,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Container(
                   margin: EdgeInsets.all(12),
-                  child: Column(
-                    children: [
-                      buildTextField(Icons.account_circle_outlined, "Username"),
-                      buildTextField(Icons.lock_outline, "Password"),
-                    ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        buildTextField(Icons.account_circle_outlined,
+                            "Username", username),
+                        buildTextField(
+                            Icons.lock_outline, "Password", password),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -113,32 +124,43 @@ class _LoginPageState extends State<LoginPage> {
           right: 0,
           left: 0,
           child: Center(
-            child: Container(
-              height: 90,
-              width: 90,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(50),
-              ),
+            child: GestureDetector(
+              onTap: () {
+                // validate form
+                if (!(_formKey.currentState?.validate() ?? false)) return;
+                // get provider read
+                LoginProvider provider = context.read<LoginProvider>();
+                provider.getLogin(username.text, password.text);
+                // navigate back
+                Navigator.pop(context);
+              },
               child: Container(
+                height: 90,
+                width: 90,
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.orange, Colors.red],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(.3),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: Offset(0, 1),
-                    )
-                  ],
                 ),
-                child: Icon(Icons.arrow_forward, color: Colors.white),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.orange, Colors.red],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.3),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
+                      )
+                    ],
+                  ),
+                  child: Icon(Icons.arrow_forward, color: Colors.white),
+                ),
               ),
             ),
           ),
@@ -147,10 +169,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildTextField(IconData icon, String hintText) {
+  Widget buildTextField(
+      IconData icon, String hintText, TextEditingController textController) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: TextFormField(
+        controller: textController,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Palette.iconColor),
           enabledBorder: OutlineInputBorder(

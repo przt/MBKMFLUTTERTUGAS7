@@ -1,41 +1,76 @@
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:tugas_kelompok/model/article_model.dart';
 import 'dart:convert';
 
 import 'package:tugas_kelompok/model/login_model.dart';
+import 'package:tugas_kelompok/model/search_model.dart';
 
-class LoginService {
-  Future<LoginResponseModel> login(LoginRequestModel requestModel) async {
-    const String url = "https://gits-msib.my.id/wp-json/jwt-auth/v1/token";
+class ConstUrl {
+  static const String baseUrl = 'https://gits-msib.my.id/wp-json';
+  static String _loginToken = '';
 
-    final response =
-        await http.post(Uri.parse(url), body: requestModel.toJson());
-    if (response.statusCode == 200 || response.statusCode == 400) {
-      return LoginResponseModel.fromJson(json.decode(response.body));
+  String get token => _loginToken;
+  void setToken(token) {
+    _loginToken = token;
+  }
+}
+//API FOR LOGIN
+class ApiLogin {
+  Future<LoginModel> login({
+    required String username,
+    required String password,
+  }) async {
+    // Uri uri = Uri.https(Constant.baseUrl, '/jwt-auth/v1/token');
+    Response _response = await post(
+      Uri.parse(ConstUrl.baseUrl + '/jwt-auth/v1/token'),
+      body: <String, dynamic>{
+        'username': username,
+        'password': password,
+      },
+    );
+    if (_response.statusCode == 200) {
+      final LoginModel responseData = LoginModel.fromJson(_response.body);
+      return responseData;
     } else {
-      throw Exception('failed to load data');
+      throw Exception("Failed to login!");
     }
   }
 }
 
-class ArticleService {
-  final String url = "https://gits-msib.my.id/wp-json/wp/v2/posts";
+class ApiArticle {
+  static final List<ArticleModel> listPost = [];
 
-  Future<List<Article>> getPosts() async {
-    http.Response res = await http.get(Uri.parse(url));
+  Future<List<ArticleModel>> getAllPost() async {
+    final response = await get(Uri.parse(ConstUrl.baseUrl + "/wp/v2/posts"));
 
-    if (res.statusCode == 200) {
-      List<dynamic> body = jsonDecode(res.body);
-
-      List<Article> posts = body
-          .map(
-            (dynamic item) => Article.fromJson(item),
-          )
-          .toList();
-
-      return posts;
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      for (Map<String, dynamic> i in data) {
+        listPost.add(ArticleModel.fromJson(i));
+      }
+      return listPost;
     } else {
-      throw "Unable to retrieve posts.";
+      throw Exception("Failed to load Post");
+    }
+  }
+}
+
+class ApiSearch {
+  static final List<SearchModel> listPost = [];
+
+  Future<List<SearchModel>> search(String name) async {
+    // Uri uri = Uri.https(Constant.baseUrl, '/jwt-auth/v1/token');
+    Response _response = await get(
+      Uri.parse(ConstUrl.baseUrl + '/wp/v2/search?search=$name'),
+    );
+    if (_response.statusCode == 200) {
+      final data = json.decode(_response.body);
+      for (Map<String, dynamic> i in data) {
+        listPost.add(SearchModel.fromJson(i));
+      }
+      return listPost;
+    } else {
+      throw Exception("Failed to login!");
     }
   }
 }

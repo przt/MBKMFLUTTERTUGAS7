@@ -1,61 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_kelompok/colors_config.dart';
+import 'package:tugas_kelompok/model/article_model.dart';
+import 'package:tugas_kelompok/provider/all_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_html/flutter_html.dart';
 
-class CardNews extends StatefulWidget {
-  const CardNews({Key? key}) : super(key: key);
+class ArticleCard extends StatelessWidget {
+  final ArticleModel articleModel;
 
-  @override
-  _CardNewsState createState() => _CardNewsState();
-}
+  const ArticleCard({Key? key, required this.articleModel}) : super(key: key);
 
-class _CardNewsState extends State<CardNews> {
+  _urlLaunchUrl() async {
+    var url = articleModel.link;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw "Could not launch $url";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(  
-      child: Container(
-        height: 210,
-        width: 310,
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 100,
-                spreadRadius: 5,
-              )
-            ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(
-              text: TextSpan(
-                text: "Title",
-                style: TextStyle(
-                  letterSpacing: 1,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w200,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.black,
+    return Consumer<ArticleProvider>(builder: (context, provider, child) {
+      return FutureBuilder(builder: (context, snapshot) {
+        return Material(
+            color: Palette.backgroundColor,
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 8,
+                  ),
+                  title: Text(
+                    articleModel.title.rendered,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: SizedBox(
+                    height: 65,
+                    child: Html(
+                      data: articleModel.excerpt.rendered,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.keyboard_arrow_right),
+                    onPressed: () => _urlLaunchUrl(),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-            Text(
-              "content",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-                fontWeight: FontWeight.w200,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                const Divider(),
+              ],
+            ));
+      });
+    });
   }
 }
