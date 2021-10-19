@@ -43,9 +43,6 @@ class MyApp extends StatelessWidget {
       ) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            brightness: Brightness.dark,
-          ),
           initialRoute: '/splash_screen',
           routes: {
             '/splash_screen': (context) => const SplashScreen(),

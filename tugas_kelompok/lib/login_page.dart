@@ -108,9 +108,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         buildTextField(Icons.account_circle_outlined,
-                            "Username", username),
+                            "Username", username, false),
                         buildTextField(
-                            Icons.lock_outline, "Password", password),
+                            Icons.lock_outline, "Password", password, true),
                       ],
                     ),
                   ),
@@ -169,11 +169,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildTextField(
-      IconData icon, String hintText, TextEditingController textController) {
+  Widget buildTextField(IconData icon, String hintText,
+      TextEditingController textController, bool isObscure) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextFormField(
+      child: TextField(
+        obscureText: isObscure,
         controller: textController,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Palette.iconColor),

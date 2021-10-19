@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_kelompok/colors_config.dart';
+import 'package:tugas_kelompok/login_page.dart';
 import 'package:tugas_kelompok/model/search_model.dart';
+import 'package:tugas_kelompok/post_page.dart';
 import 'package:tugas_kelompok/provider/all_provider.dart';
 import 'package:tugas_kelompok/widget/card_search.dart';
+import 'package:tugas_kelompok/widget/custom_drawer.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -17,7 +21,9 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Palette.backgroundColor,
       appBar: AppBar(
+        backgroundColor: Palette.backgroundColor,
         title: const Text("Search"),
       ),
       body: SingleChildScrollView(
@@ -59,6 +65,7 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
       ),
+      drawer: CustomDrawer(),
     );
   }
 
@@ -76,7 +83,7 @@ class _SearchPageState extends State<SearchPage> {
     } else if (provider.state == ResultState.HasData) {
       return _searchController.text.isEmpty
           ? Center(
-              child: Text("Cari Blog anda..."),
+              child: Text("Search Article"),
             )
           : _postCard(provider.postResult);
     } else if (provider.state == ResultState.NoData) {

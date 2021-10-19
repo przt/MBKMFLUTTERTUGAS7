@@ -6,6 +6,7 @@ import 'package:tugas_kelompok/api/api_service.dart';
 import 'package:tugas_kelompok/provider/all_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_kelompok/widget/card_news.dart';
+import 'package:tugas_kelompok/widget/custom_drawer.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({Key? key}) : super(key: key);
@@ -71,60 +72,7 @@ class _PostPageState extends State<PostPage> {
           }
         },
       ),
-      drawer: new Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Palette.backgroundColor,
-              ),
-              child: Text('GITS Article',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  )),
-            ),
-            ListTile(
-              leading: Icon(Icons.home_outlined),
-              title: const Text(
-                'Home',
-                style: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.subdirectory_arrow_right_rounded),
-              title: const Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-              onTap: () {
-                // Update the state of the app
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-                // ...
-                // Then close the drawer
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
     );
   }
 }
