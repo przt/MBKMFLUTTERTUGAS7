@@ -55,8 +55,10 @@ class _PostPageState extends State<PostPage> {
               shrinkWrap: true,
               itemCount: provider.postResult.length,
               itemBuilder: (context, index) {
-                var post = provider.postResult[index];
-                return ArticleCard(articleModel: post);
+
+                  var post = provider.postResult[index];
+                  return ArticleCard(articleModel: post);
+
               },
             );
           } else if (provider.state == ResultState.NoData) {

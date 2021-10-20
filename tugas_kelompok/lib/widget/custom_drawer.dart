@@ -18,7 +18,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return Drawer(
       child: Consumer<LoginProvider>(
           builder: (context, LoginProvider login, child) {
-        bool isLogin = login.getToken();
+          bool isLogin = login.getToken();
         return ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -68,10 +68,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
               onTap: () {
                 // Update the state of the app
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
+                if  (isLogin) {
+                    login.logout();
+                    Navigator.pop(context);
+                }else{
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                }
+
                 // ...
                 // Then close the drawer
               },

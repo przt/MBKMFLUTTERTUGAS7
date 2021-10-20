@@ -127,12 +127,15 @@ class _LoginPageState extends State<LoginPage> {
             child: GestureDetector(
               onTap: () {
                 // validate form
-                if (!(_formKey.currentState?.validate() ?? false)) return;
-                // get provider read
                 LoginProvider provider = context.read<LoginProvider>();
-                provider.getLogin(username.text, password.text);
-                // navigate back
-                Navigator.pop(context);
+                if (_formKey.currentState!.validate()){
+                  LoginProvider provider = context.read<LoginProvider>();
+                  provider.getLogin(username.text, password.text);
+                  // navigate back
+                  Navigator.pop(context);
+                }
+                // get provider read
+
               },
               child: Container(
                 height: 90,
@@ -173,9 +176,15 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController textController, bool isObscure) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextField(
+      child: TextFormField(
         obscureText: isObscure,
         controller: textController,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some ' + hintText;
+          }
+          return null;
+        },
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Palette.iconColor),
           enabledBorder: OutlineInputBorder(
