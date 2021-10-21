@@ -31,11 +31,11 @@ class MyApp extends StatelessWidget {
             apiLogin: ApiLogin(),
           ),
         ),
-        ChangeNotifierProvider(
-          create: (BuildContext context) => SearchProvider(
-            apiSearch: ApiSearch(),
-          ),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (BuildContext context) => SearchProvider(
+        //     apiSearch: ApiSearch(),
+        //   ),
+        // ),
       ],
       builder: (
         BuildContext context,

@@ -6,53 +6,48 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 
 class CardSearch extends StatelessWidget {
-  final SearchModel searchModel;
+  final List<SearchModel>? searchModel;
+  final String article;
+  // final String linkUrl;
 
-  const CardSearch({Key? key, required this.searchModel}) : super(key: key);
+  const CardSearch({
+    Key? key,
+    required this.searchModel,
+    required this.article,
+  }) : super(key: key);
 
-  _urlLaunchUrl() async {
-    var url = searchModel.url;
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw "Could not launch $url";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ArticleProvider>(
-      builder: (context, provider, child) {
-        return FutureBuilder(
-          builder: (context, snapshot) {
-            return Material(
-              color: Palette.backgroundColor,
-              child: Column(
-                children: [
-                  ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 8,
-                    ),
-                    title: Text(
-                      searchModel.title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.keyboard_arrow_right),
-                      onPressed: () => _urlLaunchUrl(),
-                    ),
-                  ),
-                  const Divider(),
-                ],
-              ),
-            );
-          },
+    if (searchModel == null) {
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          "Hasil untuk pencarian tidak ditemukan",
+          style: const TextStyle(
+            fontSize: 18.0,
+          ),
+        ),
+      );
+    }
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        SearchModel search = searchModel![index];
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("ID : " + search.id.toString()),
+                  Text(search.title.toString()),
+                  Text("link: " + search.url.toString()),
+                ]),
+          ),
         );
       },
+      itemCount: searchModel!.length,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_kelompok/api/api_service.dart';
 import 'package:tugas_kelompok/colors_config.dart';
 import 'package:tugas_kelompok/login_page.dart';
 import 'package:tugas_kelompok/model/search_model.dart';
@@ -16,7 +17,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  List<SearchModel>? _search;
+  bool _onSearch = false;
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,95 +32,65 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Palette.backgroundColor,
       appBar: AppBar(
         backgroundColor: Palette.backgroundColor,
-        title: const Text("Search"),
-      ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              child: Form(
-                child: Consumer<SearchProvider>(
-                    builder: (context, provider, child) {
-                  return Column(
-                    children: [
-                      TextFormField(
-                        controller: _searchController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Searching',
-                          suffixStyle: TextStyle(color: Colors.grey),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              provider.setName(_searchController.text);
-                            },
-                            icon: Icon(
-                              Icons.search,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: _buildList(provider),
-                      ),
-                    ],
-                  );
-                }),
-              ),
+        title: TextField(
+          controller: _searchController,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: 'Ketik Disini',
+            suffixIcon: IconButton(
+              onPressed: _searchPost,
+              icon: const Icon(Icons.search),
             ),
-          ],
+            border: InputBorder.none,
+          ),
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+          autofocus: true,
+          onEditingComplete: _searchPost,
         ),
       ),
+      body: _body(),
       drawer: CustomDrawer(),
     );
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  Future<void> _searchPost() async {
+    setState(() {
+      _onSearch = true;
+    });
+    _search = await ApiSearch.getData(_searchController.text);
+    setState(() {
+      _onSearch = false;
+    });
   }
 
-  _buildList(SearchProvider provider) {
-    if (provider.state == ResultState.Loading) {
+  Widget _body() {
+    if (_onSearch) {
       return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (provider.state == ResultState.HasData) {
-      return _searchController.text.isEmpty
-          ? Center(
-              child: Text("Search Article"),
-            )
-          : _postCard(provider.postResult);
-    } else if (provider.state == ResultState.NoData) {
-      return Center(
-        child: Text(provider.message),
-      );
-    } else if (provider.state == ResultState.Error) {
-      return Center(
-        child: Text(provider.message),
+        child: Column(
+          children: const <Widget>[
+            Text("Cari Keyword Postingan"),
+            CircularProgressIndicator(),
+          ],
+        ),
       );
     } else {
-      return Center(
-        child: Text(""),
-      );
+      return CardSearch(searchModel: _search, article: _searchController.text);
     }
   }
-
-  Widget _postCard(List<SearchModel> postResult) {
-    return Column(
-        children: postResult
-            .map(
-              (e) => Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Container(
-                  width: double.infinity,
-                  child: CardSearch(searchModel: e),
-                ),
-              ),
-            )
-            .toList());
-  }
 }
+//   Widget _postCard(List<SearchModel> postResult) {
+//     return Column(
+//         children: postResult
+//             .map(
+//               (e) => Padding(
+//                 padding: EdgeInsets.only(top: 8),
+//                 child: Container(
+//                   width: double.infinity,
+//                   child: CardSearch(searchModel: e),
+//                 ),
+//               ),
+//             )
+//             .toList());
+//   }
+// }
