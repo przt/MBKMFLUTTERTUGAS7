@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:tugas_kelompok/colors_config.dart';
 import 'package:tugas_kelompok/provider/all_provider.dart';
 import 'package:provider/provider.dart';
@@ -125,15 +126,38 @@ class _LoginPageState extends State<LoginPage> {
           left: 0,
           child: Center(
             child: GestureDetector(
-              onTap: () {
+
+              onTap: () async {
                 // validate form
-                LoginProvider provider = context.read<LoginProvider>();
-                if (_formKey.currentState!.validate()){
+
+                Response _response = await post(
+                  Uri.parse('https://gits-msib.my.id/wp-json/jwt-auth/v1/token'),
+                  body: <String, dynamic>{
+                    'username': username.text,
+                    'password': password.text,
+                  },
+                );
+                if (_formKey.currentState!.validate() && _response.statusCode == 200){
                   LoginProvider provider = context.read<LoginProvider>();
                   provider.getLogin(username.text, password.text);
-                  // navigate back
                   Navigator.pop(context);
+                }else{
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Pemberitahuan'),
+                      content: const Text('Apakah Username & Password anda masukan benar ?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
                 }
+
+
                 // get provider read
 
               },

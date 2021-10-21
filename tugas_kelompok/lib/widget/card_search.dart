@@ -40,9 +40,16 @@ class CardSearch extends StatelessWidget {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("ID : " + search.id.toString()),
-                  Text(search.title.toString()),
-                  Text("link: " + search.url.toString()),
+                  Text(search.title.toString(),
+                    style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),),
+                  SizedBox(
+                    height: 65,
+                    child: Text("link: " + search.url.toString()),
+                  ),
+
                 ]),
           ),
         );

@@ -43,10 +43,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PostPage()),
-                );
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/article_list', (Route<dynamic> route) => false);
               },
             ),
             ListTile(
@@ -77,9 +75,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 }
-
-                // ...
-                // Then close the drawer
               },
             ),
           ],

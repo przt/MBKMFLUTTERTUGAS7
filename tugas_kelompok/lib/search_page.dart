@@ -79,18 +79,3 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 }
-//   Widget _postCard(List<SearchModel> postResult) {
-//     return Column(
-//         children: postResult
-//             .map(
-//               (e) => Padding(
-//                 padding: EdgeInsets.only(top: 8),
-//                 child: Container(
-//                   width: double.infinity,
-//                   child: CardSearch(searchModel: e),
-//                 ),
-//               ),
-//             )
-//             .toList());
-//   }
-// }
