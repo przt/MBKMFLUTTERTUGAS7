@@ -126,27 +126,30 @@ class _LoginPageState extends State<LoginPage> {
           left: 0,
           child: Center(
             child: GestureDetector(
-
               onTap: () async {
                 // validate form
 
                 Response _response = await post(
-                  Uri.parse('https://gits-msib.my.id/wp-json/jwt-auth/v1/token'),
+                  Uri.parse(
+                      'https://gits-msib.my.id/wp-json/jwt-auth/v1/token'),
                   body: <String, dynamic>{
                     'username': username.text,
                     'password': password.text,
                   },
                 );
-                if (_formKey.currentState!.validate() && _response.statusCode == 200){
+                if (_formKey.currentState!.validate() &&
+                    _response.statusCode == 200) {
                   LoginProvider provider = context.read<LoginProvider>();
                   provider.getLogin(username.text, password.text);
                   Navigator.pop(context);
-                }else{
+                } else {
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                      title: const Text('Pemberitahuan'),
-                      content: const Text('Apakah Username & Password anda masukan benar ?'),
+                      title: const Text(
+                          'Pemberitahuan Username/Password salah'),
+                      content: const Text(
+                          'Apakah Username & Password anda masukan benar?'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => Navigator.pop(context),
@@ -157,9 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 }
 
-
                 // get provider read
-
               },
               child: Container(
                 height: 90,
